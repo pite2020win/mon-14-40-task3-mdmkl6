@@ -28,3 +28,42 @@
 #
 #Delete these comments before commit!
 #Good luck.
+
+def addclas(data,clasname):
+  data[clasname]={}
+
+def addstudent(data,clasname,studentnumber,studentname,studentsurname):
+  data[clasname][studentnumber]={}
+  data[clasname][studentnumber]["studentname"]=studentname
+  data[clasname][studentnumber]["studentsurname"]=studentsurname
+
+def addsubject(data,clasname,studentnumber,subjectname):
+  data[clasname][studentnumber][subjectname]={}
+  data[clasname][studentnumber][subjectname]["notes"]=[]
+
+def setnote(data,clasname,studentnumber,subjectname,note,noteindex):
+  data[clasname][studentnumber][subjectname]["notes"].insert(noteindex,note)
+
+def getendnote(data,clasname,studentnumber,subjectname):
+  s=0
+  il=0
+  for x in data[clasname][studentnumber][subjectname]['notes']:
+    s=s+x
+    il=il+1
+  data[clasname][studentnumber][subjectname]["lastnote"]=int(s/il)
+  return int(s/il)
+
+def getavarge(data,clasname,studentnumber):
+  s=0
+  il=0
+  for x in data[clasname][studentnumber]:
+    s=s+data[clasname][studentnumber][x]
+    il=il+1
+  data[clasname][studentnumber]["avarge"]=int(s/il)
+  return (s/il)
+
+
+data={}
+
+addclas(data,"clas1")
+addstudent(data,'clas1','student1','name','surname')
