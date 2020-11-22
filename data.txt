@@ -1,0 +1,1 @@
+{"school1": {"class1": {}, "class2": {"student2": {"subject2": ["1", "5", "4", "0"]}}, "class3": {}}, "school2": {"class3": {"student3": {"subject3": ["2", "3", "4", "5"]}}, "class4": {"student4": {"subject4": ["3.5"]}}}, "school3": {"class5": {"student5": {"subject5": ["3.5", "5", "4.5"]}}, "class6": {"student6": {"subject6": ["3", "5"]}}}}

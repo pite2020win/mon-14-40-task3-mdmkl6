@@ -1,0 +1,16 @@
+[[package]]
+category = "main"
+description = "Statistic for django models"
+name = "django-statistic"
+optional = false
+python-versions = "*"
+version = "1.0"
+
+[metadata]
+content-hash = "64ecf019e63b72aed145fd122bbc5f12ab1c78a1a37f5efe8834a3e3bd49bcf2"
+python-versions = "^3.8"
+
+[metadata.files]
+django-statistic = [
+    {file = "django-statistic-1.0.tar.gz", hash = "sha256:742461b95baec130e3a40ea66089e837e119b3892f5b5d4520daf9bbc9a295f1"},
+]
