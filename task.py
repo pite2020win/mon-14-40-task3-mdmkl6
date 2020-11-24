@@ -22,105 +22,112 @@ def addone(data,name):
 
 def choseone(data):
   while data!={}:
-    l=[]
-    for x in data:
-      l.append(x)
-    logging.info(l)
-    a=input(':')
-    if a in data:
-      return a
+    list_to_chose=[]
+    for element in data:
+      list_to_chose.append(element)
+    logging.info(list_to_chose)
+    chose=input(':')
+    if chose in data:
+      return chose
     else:
       logging.info("This option does not exist.Chose again:")
 
-def isnote(x):
+def isfloat(x):
   try:
+    x=float(x)
+    return 1
+  except:
+    return 0
+
+def isnote(x):
+  if isfloat(x):
     x=float(x)
     if x>=2 and x<=5 and x%0.5==0:
       return 1
     else:
       return 0
-  except:
+  else:
     return 0
 
-def average(data):
+def average_of_all_from(data):
   if type(data) is dict:
-    a=[]
-    for x in data:
-      i=average(data[x])
-      if i!=-1 :
-        a.append(i)
-    if a!=[] :
-      return statistics.fmean(a)
+    list_of_note=[]
+    for element in data:
+      note=average_of_all_from(data[element])
+      if note!=-1 :
+        list_of_note.append(note)
+    if list_of_note!=[] :
+      return statistics.fmean(list_of_note)
     else:
       return -1
 
   elif type(data) is list:
-    a=list(filter(isnote,data))
-    a=list(map(float,a))
-    if a!=[] :
-      return statistics.fmean(a)
+    list_of_note=list(filter(isnote,data))
+    list_of_note=list(map(float,list_of_note))
+    if list_of_note!=[] :
+      return statistics.fmean(list_of_note)
     else:
       return -1
   else:
     return -1
 
-def printree(data,deep=0):
+def prin_all_by_tree(data,deep=0):
   if type(data) is dict:
-    for x in data:
-      logging.info("{}|__{}".format(deep*"   ",x))
-      printree(data[x],deep+1)
+    for element in data:
+      logging.info("{}|__{}".format(deep*"   ",element))
+      prin_all_by_tree(data[element],deep+1)
   elif type(data) is list:
     logging.info("{}|__{}".format(deep*"   ",data))
   else:
     logging.error("Błąd")
 
-def sabcan(data,clas,name):
-  for x in  data:
-    for y in data[x]:
-      if y==clas:
-        for z in data[x][y]:
-          if z==name:
-            return average(data[x][y][z])
+def get_average_by_class_and_name(data,clas,name):
+  for school in  data:
+    for _class in data[school]:
+      if _class==clas:
+        for student in data[school][_class]:
+          if student==name:
+            return average_of_all_from(data[school][_class][student])
   return -1
 
-def scsbn(data,name):
-  for x in data:
-    for y in data[x]:
-      for z in data[x][y]:
-        if z== name:
-          return [x,y]
-  return -1
+def get_school_and_class_of_student(data,name):
+  for school in data:
+    for _class in data[school]:
+      for student in data[school][_class]:
+        if student== name:
+          return [school,_class]
+  return []
 
 
 
 
-def mnote(data,data2):
+def manage_note(subject,data):
   while True:
     logging.info("Notes:")
-    logging.info(data)
+    logging.info(subject)
     logging.info("Chose:\n1.Add Note.\n2.Delete Note.\n3.Subject average.\n0.Back.")
     a=input()
     os.system('clear')
 
     if a=='1':
-      data.append(input("Enter note:")) 
+      subject.append(input("Enter note:")) 
 
     elif a=='2':
       x=''
-      while x not in data:
+      while x not in subject:
         x=input("Chose note:")
-      data.remove(x)
+      subject.remove(x)
 
     elif a=='3':
-      logging.info(average(data))      
+      logging.info(average_of_all_from(subject))      
 
     elif a=='0':
       break
     
-    save(data2,'data.txt')
+    save(data,'data.json')
 
 
-def msubject(data,data2):
+def manage_subject(student,data):
   while True:
     logging.info("Chose:\n1.Chose subject.\n2.Add subject\n3.Delete subject\n4.Student average.\n5.Print all from student.\n0.Back.")
     a=input()
@@ -128,28 +135,28 @@ def msubject(data,data2):
 
     if a=='1':
       logging.info("Chose subject:")
-      subject=choseone(data)
-      mnote(data[subject],data2)         
+      subject=choseone(student)
+      manage_note(student[subject],data)         
     elif a=='2':
-      data[input("Enter subject name:")]=[]
+      student[input("Enter subject name:")]=[]
 
     elif a=='3':
       logging.info("Chose subject to delate:")
-      del data[choseone(data)]
+      del student[choseone(student)]
 
     elif a=='4':
-      logging.info(average(data))
+      logging.info(average_of_all_from(student))
 
     elif a=='5':
-      printree(data)
+      prin_all_by_tree(student)
 
     elif a=='0':
       break
     
-    save(data2,'data.txt')
+    save(data,'data.json')
 
 
-def mstudent(data,data2):
+def manage_student(_class,data):
   while True:
     logging.info("Chose:\n1.Chose student.\n2.Add studnet.\n3.Delete student.\n4.Class average.\n5.Print all from class\n0.Back.")
     a=input()
@@ -158,28 +165,28 @@ def mstudent(data,data2):
 
     if a=='1':
       logging.info("Chose Student:")
-      student=choseone(data)
-      msubject(data[student],data2)         
+      student=choseone(_class)
+      manage_subject(_class[student],data)         
     elif a=='2':
-      addone(data,input("Enter Student name:"))
+      addone(_class,input("Enter Student name:"))
 
     elif a=='3':
       logging.info("Chose Student to delate:")
-      del data[choseone(data)]
+      del _class[choseone(_class)]
 
     elif a=='4':
-      logging.info(average(data))
+      logging.info(average_of_all_from(_class))
 
     elif a=='5':
-      printree(data)
+      prin_all_by_tree(_class)
 
     elif a=='0':
       break
     
-    save(data2,'data.txt')
+    save(data,'data.json')
 
 
-def mclass(data,data2):
+def manage_class(school,data):
   while True:
     logging.info("Chose:\n1.Chose class.\n2.Add class\n3.Delete class\n4.Shool average.\n5.Print all from school..\n0.Back")
     a=input()
@@ -188,30 +195,30 @@ def mclass(data,data2):
 
     if a=='1':
       logging.info("Chose class:")
-      clas=choseone(data)
-      mstudent(data[clas],data2)
-      addone(data,input("Enter class name:"))
+      _class=choseone(school)
+      manage_student(school[_class],data)
+      addone(school,input("Enter class name:"))
 
     elif a=='2':
-      addone(data,input("Enter class name:"))
+      addone(school,input("Enter class name:"))
 
     elif a=='3':
       logging.info("Chose class to delate:")
-      del data[choseone(data)]
+      del school[choseone(school)]
     
     elif a=='4':
-      logging.info(average(data))
+      logging.info(average_of_all_from(school))
 
     elif a=='5':
-      printree(data)
+      prin_all_by_tree(school)
 
     elif a=='0':
       break
     
-    save(data2,'data.txt')
+    save(data,'data.json')
 
 
-def mschool(data,data2):
+def manage_school(data):
   while True:
     logging.info("Chose:\n1.Chose school\n2.Add School.\n3.Del school\n4.All School average.\n5.Print all.\n6.Student avarage by class and name.\n7.Student class,school by name.\n0.End.")
     a=input()
@@ -220,7 +227,7 @@ def mschool(data,data2):
     if a=='1':
       logging.info("Chose school:")
       school=choseone(data)
-      mclass(data[school],data2) 
+      manage_class(data[school],data) 
             
     elif a=='2':
       addone(data,input("Enter school name:"))
@@ -230,21 +237,21 @@ def mschool(data,data2):
       del data[choseone(data)]
 
     elif a=='4':
-      logging.info(average(data))
+      logging.info(average_of_all_from(data))
 
     elif a=='5':
-      printree(data)
+      prin_all_by_tree(data)
 
     elif a=='6':
-      x=sabcan(data,input("Enter class:"),input("Enter name:"))
+      x=get_average_by_class_and_name(data,input("Enter class:"),input("Enter name:"))
       if x==-1:
         logging.info("Doesnt found.")
       else:
         logging.info(x)
     
     elif a=='7':
-      x=scsbn(data,input("Enter name: "))
-      if x==-1:
+      x=get_school_and_class_of_student(data,input("Enter name: "))
+      if x==[]:
         logging.info("Doesnt found.")
       else:
         logging.info("School:{}, Class:{}.".format(x[0],x[1]))
@@ -253,17 +260,14 @@ def mschool(data,data2):
     elif a=='0':
       break
     
-    save(data2,'data.txt')
-
-
+    save(data,'data.json')
 
 
   
+if __name__ == "__main__":
 
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+  logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-data=read('data.txt')
+  data=read('data.json')
 
-data2=data
-
-mschool(data,data2)
+  manage_school(data)
